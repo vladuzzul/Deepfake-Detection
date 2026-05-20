@@ -40,7 +40,7 @@ print(df.keys())
 print("\nDataset Information:")
 print(df.describe())
 
-
+print("Initial Images:", df.shape)
 
 DOWNLOADED_IMAGES_PATH = "dataset/downloaded_images.csv"
 IMAGE_FOLDER = "dataset/working_images"
@@ -74,10 +74,6 @@ else:
 
     df["image_path"] = image_paths
 
-    df.to_csv(DOWNLOADED_IMAGES_PATH, index=False)
-
-    print(f"Saved CSV to: {DOWNLOADED_IMAGES_PATH}")
-
 if "image_path" not in df.columns:
     df = pd.read_csv(DOWNLOADED_IMAGES_PATH)
 
@@ -100,31 +96,9 @@ df = df[valid_images].reset_index(drop=True)
 
 print("Remaining Images:", df.shape)
 
-def show_images(label_name, n):
+df.dropna()
+df.to_csv(DOWNLOADED_IMAGES_PATH, index=False)
 
-    sample_df = df[df['label'] == label_name].sample(n)
+print(f"Saved CSV to: {DOWNLOADED_IMAGES_PATH}")
 
-    fig, axes = plt.subplots(3,4, figsize=(15,10))
 
-    axes = axes.flatten()
-
-    for ax, (_, row) in zip(axes, sample_df.iterrows()):
-
-        img_path = row['image_path']
-
-        try:
-            image = np.asarray(Image.open(img_path))
-
-            ax.imshow(image)
-            ax.axis('off')
-
-        except:
-            ax.text(0.5,0.5,'Image Error',
-                    ha='center', va='center')
-
-    plt.suptitle(f"{label_name} Samples", fontsize=22)
-
-    plt.tight_layout()
-    plt.show()
-
-show_images("FAKE", 12)
