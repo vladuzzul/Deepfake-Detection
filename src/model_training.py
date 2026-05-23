@@ -1,21 +1,11 @@
-'''
+"""
 Title: The file that trains and creates the model
 Author: Vlad Cozma
 Creation Date: 21.05.2026
-'''
+"""
 
-import numpy as np
 import pandas as pd
 from pathlib import Path
-
-from sklearn.metrics import (
-    classification_report,
-    confusion_matrix,
-    accuracy_score,
-    roc_auc_score
-)
-
-import tensorflow as tf
 
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
@@ -54,21 +44,14 @@ train_df = pd.read_csv(TRAIN_PATH)
 val_df = pd.read_csv(VAL_PATH)
 test_df = pd.read_csv(TEST_PATH)
 
-
-IMG_SIZE = 224
-BATCH_SIZE = 32
-
 # Prepare the training and validation images
 train_datagen = ImageDataGenerator(
-    rescale=1./255,
     rotation_range=20,
     zoom_range=0.2,
     horizontal_flip=True
 )
 
-val_datagen = ImageDataGenerator(
-    rescale=1./255
-)
+test_datagen = ImageDataGenerator()
 
 # Dataloader for training data
 train_generator = train_datagen.flow_from_dataframe(
@@ -81,7 +64,7 @@ train_generator = train_datagen.flow_from_dataframe(
 )
 
 # Dataloader for validation data
-val_generator = val_datagen.flow_from_dataframe(
+val_generator = test_datagen.flow_from_dataframe(
     dataframe=val_df,
     x_col='image_path',
     y_col='label',
@@ -91,7 +74,7 @@ val_generator = val_datagen.flow_from_dataframe(
 )
 
 # Dataloader for testing data
-test_generator = val_datagen.flow_from_dataframe(
+test_generator = test_datagen.flow_from_dataframe(
     dataframe=test_df,
     x_col='image_path',
     y_col='label',
@@ -155,39 +138,6 @@ history = model.fit(
 # Save the history of the model for evaluation
 history_df = pd.DataFrame(history.history)
 history_df.to_csv(HISTORY_PATH)
-
-# Predict on test set
-pred_probs = model.predict(
-    test_generator
-)
-
-preds = (
-    pred_probs > 0.5
-).astype(int)
-
-true_labels = test_generator.classes
-
-# Show accuracy
-acc = accuracy_score(
-    true_labels,
-    preds
-)
-print("Accuracy:", acc)
-
-# Show model report
-print(
-    classification_report(
-        true_labels,
-        preds
-    )
-)
-
-# Show ROC AUC score
-auc = roc_auc_score(
-    true_labels,
-    pred_probs
-)
-print("ROC AUC Score:", auc)
 
 # Save model
 model.save(

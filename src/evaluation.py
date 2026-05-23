@@ -1,4 +1,9 @@
-import numpy as np
+"""
+Title: The file evaluates the performance of the model
+Author: Vlad Cozma
+Creation Date: 23.05.2026
+"""
+
 import pandas as pd
 from pathlib import Path
 
@@ -33,7 +38,7 @@ test_df = None
 model = None
 true_labels = None
 preds = None
-val_datagen = None
+test_datagen = None
 test_generator = None
 pred_probs = None
 
@@ -49,17 +54,15 @@ def load_model():
     global model
 
     model = tf.keras.models.load_model(MODEL_PATH)
-    
+
 def init_dataloaders():
-    global val_datagen
+    global test_datagen
     global test_generator
 
-    val_datagen = ImageDataGenerator(
-        rescale=1./255
-    )
+    test_datagen = ImageDataGenerator()
 
     # Dataloader for testing data
-    test_generator = val_datagen.flow_from_dataframe(
+    test_generator = test_datagen.flow_from_dataframe(
         dataframe=test_df,
         x_col='image_path',
         y_col='label',
@@ -126,9 +129,8 @@ def get_accuracy():
         test_generator
     )
 
-    preds = (
-        pred_probs > 0.5
-    ).astype(int)
+    pred_probs = pred_probs.ravel()
+    preds = (pred_probs > 0.5).astype(int)
 
     true_labels = test_generator.classes
 
@@ -151,7 +153,7 @@ def get_report():
             preds
         )
     )
-    
+
 def get_auc_score():
     global true_labels
     global pred_probs
@@ -174,7 +176,7 @@ def main():
     get_auc_score()
     show_accuracy_curve()
     show_confusion_matrix()
-    
+
 
 if __name__ == "__main__":
     main()
