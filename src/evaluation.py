@@ -31,6 +31,7 @@ VAL_PATH = DATA_DIR / "val_df.csv"
 TEST_PATH = DATA_DIR / "test_df.csv"
 MODEL_PATH = PROJECT_ROOT / "models" / "deepfake_detector.h5"
 HISTORY_PATH = DATA_DIR / "model_history.csv"
+USER_TEST = DATA_DIR / "user_data" / "image.png"
 
 IMG_SIZE = 224
 BATCH_SIZE = 32
@@ -181,28 +182,22 @@ def get_auc_score():
     print("ROC AUC Score:", auc)
     return auc
 
-def test_model():
-    user_df = pd.read_csv(DATA_DIR / "user_data" / "user.csv")
+def test_model(image_path=None, threshold=0.5):
+    image_path = Path(image_path)
 
-    # Dataloader for user testing data
-    user_generator = test_datagen.flow_from_dataframe(
-        dataframe=user_df,
-        x_col="image_path",
-        y_col="label",
-        target_size=(IMG_SIZE, IMG_SIZE),
-        batch_size=1,
-        class_mode='binary',
-        shuffle=False
+    img = tf.keras.utils.load_img(
+        image_path,
+        target_size=(IMG_SIZE, IMG_SIZE)
     )
 
-    pred_probs = model.predict(
-        user_generator
-    )
+    img_array = tf.keras.utils.img_to_array(img)
+    img_array = tf.expand_dims(img_array, axis=0)
 
-    pred_probs = pred_probs.ravel()
-    preds = (pred_probs > 0.5).astype(int)
+    pred_prob = model.predict(img_array, verbose=0).ravel()[0]
+    pred = int(pred_prob > threshold)
 
-    print(preds)
+    print(f"Prediction: {pred} {'FAKE' if pred == 0 else 'REAL'} (prob={pred_prob:.4f})")
+    return pred, float(pred_prob)
 
 def main():
     mlflow.set_experiment(EXPERIMENT_NAME)
@@ -243,5 +238,16 @@ def main():
     mlflow.log_artifact(str(report_json_path))
     mlflow.end_run()
 
+def user_test():
+    load_model()
+    test_model(USER_TEST)
+
+
 if __name__ == "__main__":
-    main()
+    choice = int(input("Enter 0 for image test, 1 for model evaluation: "))
+    if choice == 0:
+        user_test()
+    elif choice == 1:
+        main()
+    else:
+        raise Exception("Invalid entry")
