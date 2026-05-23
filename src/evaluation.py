@@ -181,6 +181,29 @@ def get_auc_score():
     print("ROC AUC Score:", auc)
     return auc
 
+def test_model():
+    user_df = pd.read_csv(DATA_DIR / "user_data" / "user.csv")
+
+    # Dataloader for user testing data
+    user_generator = test_datagen.flow_from_dataframe(
+        dataframe=user_df,
+        x_col="image_path",
+        y_col="label",
+        target_size=(IMG_SIZE, IMG_SIZE),
+        batch_size=1,
+        class_mode='binary',
+        shuffle=False
+    )
+
+    pred_probs = model.predict(
+        user_generator
+    )
+
+    pred_probs = pred_probs.ravel()
+    preds = (pred_probs > 0.5).astype(int)
+
+    print(preds)
+
 def main():
     mlflow.set_experiment(EXPERIMENT_NAME)
     mlflow.start_run(run_name="evaluation")
@@ -219,7 +242,6 @@ def main():
     mlflow.log_artifact(str(report_path))
     mlflow.log_artifact(str(report_json_path))
     mlflow.end_run()
-
 
 if __name__ == "__main__":
     main()
