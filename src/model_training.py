@@ -18,6 +18,8 @@ from tensorflow.keras.callbacks import (
 
 from data_preprocessing import main
 
+import mlflow
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 
@@ -33,6 +35,8 @@ HISTORY_PATH = DATA_DIR / "model_history.csv"
 
 IMG_SIZE = 224
 BATCH_SIZE = 32
+EPOCHS = 15
+EXPERIMENT_NAME = "deepfake-detection"
 
 
 # Downloads the dataset
@@ -43,6 +47,23 @@ df = pd.read_csv(DOWNLOADED_IMAGES_PATH)
 train_df = pd.read_csv(TRAIN_PATH)
 val_df = pd.read_csv(VAL_PATH)
 test_df = pd.read_csv(TEST_PATH)
+
+mlflow.set_experiment(EXPERIMENT_NAME)
+mlflow.start_run(run_name="training")
+mlflow.log_params({
+    "img_size": IMG_SIZE,
+    "batch_size": BATCH_SIZE,
+    "epochs": EPOCHS,
+    "base_model": "EfficientNetB0",
+    "base_weights": "imagenet",
+    "base_trainable": False,
+    "dropout": 0.3,
+    "optimizer": "adam",
+    "loss": "binary_crossentropy",
+    "train_samples": len(train_df),
+    "val_samples": len(val_df),
+    "test_samples": len(test_df)
+})
 
 # Prepare the training and validation images
 train_datagen = ImageDataGenerator(
@@ -128,19 +149,30 @@ reduce_lr = ReduceLROnPlateau(
 history = model.fit(
     train_generator,
     validation_data=val_generator,
-    epochs=15,
+    epochs=EPOCHS,
     callbacks=[
         early_stop,
         reduce_lr
     ]
 )
 
+for epoch in range(len(history.history["loss"])):
+    mlflow.log_metrics({
+        "train_loss": history.history["loss"][epoch],
+        "train_accuracy": history.history["accuracy"][epoch],
+        "val_loss": history.history["val_loss"][epoch],
+        "val_accuracy": history.history["val_accuracy"][epoch]
+    }, step=epoch + 1)
+
 # Save the history of the model for evaluation
 history_df = pd.DataFrame(history.history)
 history_df.to_csv(HISTORY_PATH)
+mlflow.log_artifact(str(HISTORY_PATH))
 
 # Save model
 model.save(
     MODEL_PATH
 )
+mlflow.log_artifact(str(MODEL_PATH))
+mlflow.end_run()
 print("Model Saved Successfully!")   

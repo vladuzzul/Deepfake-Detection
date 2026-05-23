@@ -221,3 +221,5 @@ data/
 Pasi_Proiect_Final.txt
 deepfake-detection-using-efficientnet-and-explaina.ipynb
 .idea/
+mlflow.db
+mlruns/

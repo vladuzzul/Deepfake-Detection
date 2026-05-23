@@ -4,6 +4,7 @@ Author: Vlad Cozma
 Creation Date: 23.05.2026
 """
 
+import json
 import pandas as pd
 from pathlib import Path
 
@@ -20,6 +21,8 @@ from sklearn.metrics import (
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+import mlflow
+
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
@@ -31,6 +34,7 @@ HISTORY_PATH = DATA_DIR / "model_history.csv"
 
 IMG_SIZE = 224
 BATCH_SIZE = 32
+EXPERIMENT_NAME = "deepfake-detection"
 
 history_df = None
 val_df = None
@@ -72,7 +76,7 @@ def init_dataloaders():
         shuffle=False
     )
 
-def show_accuracy_curve():
+def show_accuracy_curve(save_path=None):
     global history_df
 
     plt.figure(figsize=(10,5))
@@ -90,10 +94,12 @@ def show_accuracy_curve():
     plt.legend()
 
     plt.title("Accuracy Curve")
-
+    if save_path:
+        plt.tight_layout()
+        plt.savefig(save_path)
     plt.show()
 
-def show_confusion_matrix():
+def show_confusion_matrix(save_path=None):
     global true_labels
     global preds
 
@@ -115,7 +121,9 @@ def show_confusion_matrix():
     plt.ylabel("Actual")
 
     plt.title("Confusion Matrix")
-
+    if save_path:
+        plt.tight_layout()
+        plt.savefig(save_path)
     plt.show()
 
 def get_accuracy():
@@ -140,19 +148,26 @@ def get_accuracy():
         preds
     )
     print("Accuracy:", acc)
+    return acc
 
 
 def get_report():
     global true_labels
     global preds
 
-    # Show model report
-    print(
-        classification_report(
-            true_labels,
-            preds
-        )
+    report_text = classification_report(
+        true_labels,
+        preds,
+        zero_division=0
     )
+    report_dict = classification_report(
+        true_labels,
+        preds,
+        zero_division=0,
+        output_dict=True
+    )
+    print(report_text)
+    return report_text, report_dict
 
 def get_auc_score():
     global true_labels
@@ -164,18 +179,46 @@ def get_auc_score():
         pred_probs
     )
     print("ROC AUC Score:", auc)
-
+    return auc
 
 def main():
+    mlflow.set_experiment(EXPERIMENT_NAME)
+    mlflow.start_run(run_name="evaluation")
+    mlflow.log_params({
+        "img_size": IMG_SIZE,
+        "batch_size": BATCH_SIZE,
+        "threshold": 0.5
+    })
+
     load_dataframes()
     load_model()
     init_dataloaders()
 
-    get_accuracy()
-    get_report()
-    get_auc_score()
-    show_accuracy_curve()
-    show_confusion_matrix()
+    acc = get_accuracy()
+    report_text, report_dict = get_report()
+    auc = get_auc_score()
+
+    artifacts_dir = DATA_DIR / "artifacts"
+    artifacts_dir.mkdir(parents=True, exist_ok=True)
+    accuracy_curve_path = artifacts_dir / "accuracy_curve.png"
+    confusion_matrix_path = artifacts_dir / "confusion_matrix.png"
+    report_path = artifacts_dir / "classification_report.txt"
+    report_json_path = artifacts_dir / "classification_report.json"
+
+    show_accuracy_curve(save_path=accuracy_curve_path)
+    show_confusion_matrix(save_path=confusion_matrix_path)
+
+    report_path.write_text(report_text)
+    report_json_path.write_text(json.dumps(report_dict, indent=2))
+    mlflow.log_metrics({
+        "accuracy": acc,
+        "roc_auc": auc
+    })
+    mlflow.log_artifact(str(accuracy_curve_path))
+    mlflow.log_artifact(str(confusion_matrix_path))
+    mlflow.log_artifact(str(report_path))
+    mlflow.log_artifact(str(report_json_path))
+    mlflow.end_run()
 
 
 if __name__ == "__main__":
