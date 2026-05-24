@@ -39,6 +39,16 @@ body {
   min-height: 100vh;
 }
 
+a {
+  color: var(--accent-soft);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: var(--accent);
+}
+
 .page {
   position: relative;
   min-height: 100vh;
@@ -97,7 +107,7 @@ header {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .brand {
@@ -166,6 +176,7 @@ main {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1.2px;
+  align-self: flex-start;
 }
 
 h1 {
@@ -194,6 +205,10 @@ h1 {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--line);
   min-width: 140px;
+}
+
+.stat-mobile {
+  display: none;
 }
 
 .stat strong {
@@ -366,6 +381,14 @@ h1 {
   font-family: "IBM Plex Mono", monospace;
 }
 
+.repo-link {
+  margin: 0;
+}
+
+.repo-link-mobile {
+  display: none;
+}
+
 footer {
   max-width: 1120px;
   margin: 0 auto;
@@ -377,16 +400,166 @@ footer {
 
 @media (max-width: 720px) {
   header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 12px;
+    flex-wrap: nowrap;
   }
 
   .stats {
-    gap: 12px;
+    width: 100%;
   }
 
   .card {
     padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 20px 16px 0;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .page::before {
+    width: 320px;
+    height: 320px;
+    top: -140px;
+    right: -180px;
+    opacity: 0.25;
+  }
+
+  .page::after {
+    width: 280px;
+    height: 280px;
+    bottom: -160px;
+    left: -140px;
+    opacity: 0.25;
+  }
+
+  .brand {
+    gap: 10px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+
+  .brand-title {
+    font-size: 16px;
+  }
+
+  .nav-pill {
+    align-self: flex-start;
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  main {
+    padding: 32px 16px 56px;
+    gap: 20px;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .hero {
+    gap: 18px;
+  }
+
+  .kicker {
+    font-size: 11px;
+    padding: 6px 12px;
+    letter-spacing: 1px;
+  }
+
+  h1 {
+    font-size: clamp(28px, 7vw, 38px);
+    line-height: 1.1;
+  }
+
+  .hero p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .stats {
+    display: block;
+  }
+
+  .stat-desktop {
+    display: none;
+  }
+
+  .stat-mobile {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    width: 100%;
+    padding: 12px 14px;
+  }
+
+  .stat strong {
+    font-size: 18px;
+  }
+
+  .card {
+    padding: 18px;
+    gap: 16px;
+    border-radius: 20px;
+  }
+
+  .drop-zone {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .upload-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .preview img {
+    max-height: 220px;
+  }
+
+  .file-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .repo-link-desktop {
+    display: none;
+  }
+
+  .repo-link-mobile {
+    display: block;
+    margin-top: 4px;
+  }
+
+  .result-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .status-pill {
+    align-self: flex-start;
+  }
+
+  footer {
+    padding: 0 16px 24px;
+    font-size: 11px;
   }
 }
