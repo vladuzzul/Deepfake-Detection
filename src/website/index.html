@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Deepfake Detection</title>
+		<link
+			rel="preconnect"
+			href="https://fonts.googleapis.com"
+		/>
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="styles.css" />
+	</head>
+	<body>
+		<div class="page">
+			<header>
+				<div class="brand">
+					<div class="brand-mark">DF</div>
+					<div>
+						<div class="brand-title">Deepfake Detection</div>
+						<div class="note">EfficientNet</div>
+					</div>
+				</div>
+				<div class="nav-pill">Computer Vision Lab</div>
+			</header>
+
+			<main>
+				<section class="hero">
+					<div class="kicker">Real vs Deepfake</div>
+					<h1>Detect Non-Human images in seconds.</h1>
+					<p>
+						Upload an image and let the model analyze subtle facial cues, lighting
+						anomalies, and texture artifacts to estimate authenticity.<br>
+					</p>
+					<div class="stats">
+						<div class="stat">
+							<strong>EfficientNet</strong>
+							<span>Base Model</span>
+						</div>
+                        <div class="stat">
+							<strong>TensorFlow Keras</strong>
+							<span>NN Model Training</span>
+						</div>
+						<div class="stat">
+							<strong>MLflow</strong>
+							<span>Model Tracking</span>
+						</div>    
+					</div>
+                    <h2>Click <a href = "https://github.com/vladuzzul/Deepfake-Detection">here</a> for the GitHub repository.</h2>
+				</section>
+
+				<section class="card" aria-label="Deepfake prediction">
+					<div class="drop-zone" id="drop-zone">
+						<div class="upload-actions">
+							<label class="button button-primary" for="file-input">Upload image</label>
+							<button class="button button-outline" id="analyze-btn" disabled>Analyze</button>
+							<input
+								id="file-input"
+								type="file"
+								accept="image/png,image/jpeg"
+								hidden
+							/>
+						</div>
+						<p>Drag and drop an image, or use the upload button.</p>
+					</div>
+
+					<div class="preview">
+						<img
+							id="preview"
+							src=""
+							alt="Uploaded preview"
+							class="is-hidden"
+						/>
+						<div class="file-meta">
+							<span id="file-name">No file selected</span>
+							<span>JPG or PNG up to 10MB</span>
+						</div>
+					</div>
+
+					<div class="result">
+						<div class="result-title">
+							<h3 id="result-text">Prediction: --</h3>
+							<span class="status-pill" id="status-pill">Idle</span>
+						</div>
+						<p id="confidence-text">Confidence: --</p>
+					</div>
+				</section>
+			</main>
+
+			<footer>
+				Built for the Ai Engineering course at SDA final project.
+
+		<script src="app.js" defer></script>
+	</body>
+</html>
