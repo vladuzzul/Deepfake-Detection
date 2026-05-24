@@ -217,7 +217,9 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-data/
+# Keep data/ visible but ignore contents.
+data/**
+!data/.gitkeep
 Pasi_Proiect_Final.txt
 deepfake-detection-using-efficientnet-and-explaina.ipynb
 .idea/

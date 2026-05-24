@@ -156,6 +156,7 @@ history = model.fit(
     ]
 )
 
+# Log mlflow metrics for each epoch in model training
 for epoch in range(len(history.history["loss"])):
     mlflow.log_metrics({
         "train_loss": history.history["loss"][epoch],
