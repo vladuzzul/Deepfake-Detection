@@ -1,5 +1,5 @@
 """
-Title: Simple FastAPI backend for deepfake prediction
+Title: FastAPI backend for deepfake prediction
 Author: Vlad Cozma
 Creation Date: 24.05.2026
 """
