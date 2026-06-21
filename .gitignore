@@ -220,6 +220,10 @@ __marimo__/
 # Keep data/ visible but ignore contents.
 data/**
 !data/.gitkeep
+!data/downloaded_images.csv
+!data/train_df.csv
+!data/val_df.csv
+!data/test_df.csv
 Pasi_Proiect_Final.txt
 deepfake-detection-using-efficientnet-and-explaina.ipynb
 .idea/
