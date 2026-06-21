@@ -16,7 +16,7 @@
 #         run: pytest course_10/AIEngineerModelPackaging/tests
 
 
-name: CI/CD Pipeline for Iris Model
+name: CI/CD Pipeline for Deepfake Model
 on: [push, pull_request]
 
 jobs:
