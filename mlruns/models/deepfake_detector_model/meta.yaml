@@ -1,9 +1,9 @@
 aliases:
-  current: '4'
-creation_timestamp: 1782197320383
+  current: '1'
+creation_timestamp: 1782216256766
 deployment_job_id: null
 deployment_job_state: null
 description: null
-last_updated_timestamp: 1782197659109
+last_updated_timestamp: 1782216256774
 name: deepfake_detector_model
 workspace: default

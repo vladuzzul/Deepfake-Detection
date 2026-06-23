@@ -1,8 +1,0 @@
-artifact_location: /Users/vladcozma/Documents/Proiecte/SDA_Final/Deepfake-Detection/mlruns/310087746497744107
-creation_time: 1782197315611
-experiment_id: '310087746497744107'
-last_update_time: 1782197315611
-lifecycle_stage: active
-name: model-registration
-trace_location: null
-workspace: default

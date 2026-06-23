@@ -1,0 +1,20 @@
+artifact_path: /Users/vladcozma/Documents/Proiecte/SDA_Final/Deepfake-Detection/mlruns/866640307103885871/models/m-9d170c790b144d049dc3159d16ec77ff/artifacts
+flavors:
+  keras:
+    data: data
+    keras_backend: tensorflow
+    keras_version: 3.14.1
+    save_exported_model: false
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.keras
+    python_version: 3.11.0
+mlflow_version: 3.12.0
+model_id: m-9d170c790b144d049dc3159d16ec77ff
+model_size_bytes: 17040262
+model_uuid: m-9d170c790b144d049dc3159d16ec77ff
+prompts: null
+run_id: 2083e481e142401eb1bb20230e2ecfc1
+utc_time_created: '2026-06-23 12:04:12.475347'
