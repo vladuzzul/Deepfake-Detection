@@ -1,0 +1,14 @@
+artifact_uri: /Users/vladcozma/Documents/Proiecte/SDA_Final/Deepfake-Detection/mlruns/310087746497744107/80c6eff9419147f3b1a62787b21b466c/artifacts
+end_time: 1782197659086
+entry_point_name: ''
+experiment_id: '310087746497744107'
+lifecycle_stage: active
+run_id: 80c6eff9419147f3b1a62787b21b466c
+run_name: register-model
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1782197654846
+status: 3
+tags: []
+user_id: vladcozma
