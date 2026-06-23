@@ -9,8 +9,8 @@ from __future__ import annotations
 from pathlib import Path
 import io
 
-import mlflow
 import numpy as np
+import tensorflow as tf
 from PIL import Image
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,7 +18,7 @@ from fastapi.staticfiles import StaticFiles
 
 APP_ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = APP_ROOT.parent
-MODEL_URI = "models:/deepfake_detector_model@current"
+MODEL_PATH = PROJECT_ROOT / "models" / "deepfake_detector.h5"
 WEB_DIR = APP_ROOT / "website"
 
 IMG_SIZE = 224
@@ -39,7 +39,7 @@ _model = None
 def get_model():
     global _model
 
-    _model = mlflow.keras.load_model(MODEL_URI)
+    _model = tf.keras.models.load_model(MODEL_PATH)
     return _model
 
 
