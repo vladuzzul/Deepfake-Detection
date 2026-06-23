@@ -1,0 +1,16 @@
+creation_timestamp: 1782216509776
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1782216509776
+model_id: m-160f3d16ff924feeb78806e28b547137
+name: deepfake_detector_model
+run_id: 40e70b9dcbfc427b9a21d4c02153c03e
+run_link: null
+source: models:/m-160f3d16ff924feeb78806e28b547137
+status: READY
+status_message: null
+storage_location: /Users/vladcozma/Documents/Proiecte/SDA_Final/Deepfake-Detection/mlruns/866640307103885871/models/m-160f3d16ff924feeb78806e28b547137/artifacts
+user_id: null
+version: 2
+workspace: default

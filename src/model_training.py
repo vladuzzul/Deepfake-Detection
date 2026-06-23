@@ -17,7 +17,7 @@ from tensorflow.keras.callbacks import (
 )
 
 from data_preprocessing import main
-
+from register_model import register_model
 import mlflow
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -177,3 +177,4 @@ model.save(
 mlflow.log_artifact(str(MODEL_PATH))
 mlflow.end_run()
 print("Model Saved Successfully!")   
+register_model()

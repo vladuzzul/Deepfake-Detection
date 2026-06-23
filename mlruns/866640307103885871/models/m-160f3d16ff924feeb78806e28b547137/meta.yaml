@@ -1,0 +1,10 @@
+artifact_location: /Users/vladcozma/Documents/Proiecte/SDA_Final/Deepfake-Detection/mlruns/866640307103885871/models/m-160f3d16ff924feeb78806e28b547137/artifacts
+creation_timestamp: 1782216505689
+experiment_id: '866640307103885871'
+last_updated_timestamp: 1782216509766
+model_id: m-160f3d16ff924feeb78806e28b547137
+model_type: null
+name: model
+source_run_id: 40e70b9dcbfc427b9a21d4c02153c03e
+status: 2
+status_message: null
