@@ -23,5 +23,3 @@ Open the app in the browser at:
 ```text
 http://localhost:8000
 ```
-
-Uvicorn may print `http://0.0.0.0:8000` inside the container, but from your browser on the host machine you should use `localhost`. The `-p 8000:8000` flag publishes the container port to your machine.
