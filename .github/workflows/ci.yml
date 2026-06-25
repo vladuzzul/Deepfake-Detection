@@ -12,7 +12,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install test dependencies
-        run: pip install pytest pandas
+        run: pip install pytest pandas tqdm requests pathlib os
 
       - name: Run unit tests
         run: pytest tests
